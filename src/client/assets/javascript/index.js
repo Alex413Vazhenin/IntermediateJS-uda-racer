@@ -91,7 +91,11 @@ async function handleCreateRace() {
 	const countdownFinished = await runCountdown();
 
 	// TODO - call the async function startRace
-
+	console.log(store.race_id);
+	if (countdownFinished) {
+		const data = await startRace(store.race_id);
+		console.log(data);
+	}
 	// TODO - call the async function runRace
 }
 
@@ -124,13 +128,19 @@ async function runCountdown() {
 
 		return new Promise(resolve => {
 			// TODO - use Javascript's built in setInterval method to count down once per second
-
+			let countdown = setInterval(() => {
+				--timer;
+			document.getElementById('big-numbers').innerHTML = --timer;
+			if (timer === 0) {
+				clearInterval(countdown);
+				resolve(true);
+			}
+			}, 1000);
 			// run this DOM manipulation to decrement the countdown for the user
-			document.getElementById('big-numbers').innerHTML = --timer
-
+			
 			// TODO - if the countdown is done, clear the interval, resolve the promise, and return
 
-		})
+		});
 	} catch(error) {
 		console.log(error);
 	}
@@ -140,35 +150,35 @@ function handleSelectPodRacer(target) {
 	console.log("selected a pod", target.id)
 
 	// remove class selected from all racer options
-	const selected = document.querySelector('#racers .selected')
-	if(selected) {
-		selected.classList.remove('selected')
+	const selected = document.querySelector('#racers .selected');
+	if (selected) {
+		selected.classList.remove('selected');
 	}
 
 	// add class selected to current target
-	target.classList.add('selected')
+	target.classList.add('selected');
 
 	// TODO - save the selected racer to the store
 }
 
 function handleSelectTrack(target) {
-	console.log("selected a track", target.id)
+	console.log("selected a track", target.id);
 
 	// remove class selected from all track options
-	const selected = document.querySelector('#tracks .selected')
+	const selected = document.querySelector('#tracks .selected');
 	if(selected) {
-		selected.classList.remove('selected')
+		selected.classList.remove('selected');
 	}
 
 	// add class selected to current target
-	target.classList.add('selected')
+	target.classList.add('selected');
 
 	// TODO - save the selected track id to the store
 	
 }
 
 function handleAccelerate() {
-	console.log("accelerate button clicked")
+	console.log("accelerate button clicked");
 	// TODO - Invoke the API call to accelerate
 }
 
@@ -186,13 +196,13 @@ function renderRacerCars(racers) {
 
 	return `
 		<ul id="racers">
-			${reuslts}
+			${results}
 		</ul>
-	`
+	`;
 }
 
 function renderRacerCard(racer) {
-	const { id, driver_name, top_speed, acceleration, handling } = racer
+	const { id, driver_name, top_speed, acceleration, handling } = racer;
 
 	return `
 		<li class="card podracer" id="${id}">
@@ -221,7 +231,7 @@ function renderTrackCards(tracks) {
 }
 
 function renderTrackCard(track) {
-	const { id, name } = track
+	const { id, name } = track;
 
 	return `
 		<li id="${id}" class="card track">
@@ -309,16 +319,16 @@ function renderAt(element, html) {
 
 // API CALLS ------------------------------------------------
 
-const SERVER = 'http://localhost:8000'
+const SERVER = 'http://localhost:8000';
 
 function defaultFetchOpts() {
 	return {
 		mode: 'cors',
 		headers: {
 			'Content-Type': 'application/json',
-			'Access-Control-Allow-Origin' : SERVER,
-		},
-	}
+			'Access-Control-Allow-Origin' : SERVER
+		}
+	};
 }
 
 // TODO - Make a fetch call (with error handling!) to each of the following API endpoints 
