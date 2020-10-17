@@ -74,17 +74,19 @@ async function delay(ms) {
 
 // This async function controls the flow of the race, add the logic and error handling
 async function handleCreateRace() {
+	try{
 	// render starting UI
-	renderAt('#race', renderRaceStartView())
-
+	renderAt('#race', renderRaceStartView(store.track_id, store.player_id))
 	// TODO - Get player_id and track_id from the store.
 	const { player_id, track_id } = store;
 	
 	// const race = TODO - invoke the API call to create the race, then save the result
-	const race = await createRace(player_id, track_id);
+	res = await createRace(player_id, track_id);
+	const resId = await resId;
+	const race_id = await resId - 1;
 
 	// TODO - update the store with the race id
-	store.race_id = race.id;
+	const update = await updateStore(store, {race_id});
 
 	// The race has been created, now start the countdown
 	// TODO - call the async function runCountdown
@@ -92,13 +94,15 @@ async function handleCreateRace() {
 
 	// TODO - call the async function startRace
 	console.log(store.race_id);
-	if (countdownFinished) {
-		const data = await startRace(store.race_id);
-		console.log(data);
+		if (countdownFinished) {
+			const start = await startRace(store.race_id);
+			const run = await runRace(store.race_id);
+		}
 	}
-	// TODO - call the async function runRace
+	catch(error) {console.log("Race creation failed", error)}
 }
 
+// TODO - call the async function runRace
 function runRace(raceID) {
 	return new Promise(resolve => {
 	// TODO - use Javascript's built in setInterval method to get race info every 500ms
@@ -176,7 +180,7 @@ function handleSelectTrack(target) {
 	target.classList.add('selected');
 
 	// TODO - save the selected track id to the store
-	const track_id = targer.id
+	const track_id = target.id
 	updateStore(store, { track_id })
 	
 }
