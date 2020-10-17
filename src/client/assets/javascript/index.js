@@ -332,6 +332,9 @@ function defaultFetchOpts() {
 }
 
 // TODO - Make a fetch call (with error handling!) to each of the following API endpoints 
+const updateStore = (state, newState) => {
+	store = Object.assign(state, newState);
+}
 
 function getTracks() {
 	// GET request to `${SERVER}/api/tracks`
