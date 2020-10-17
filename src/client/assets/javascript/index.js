@@ -376,6 +376,9 @@ function createRace(player_id, track_id) {
 
 function getRace(id) {
 	// GET request to `${SERVER}/api/races/${id}`
+	return fetch(`${SERVER}/api/races/${id}`, { ...defaultFetchOpts() })
+	.then(res => res.json())
+	.catch(error => console.log("GetRace request failed", error))
 }
 
 function startRace(id) {
@@ -389,6 +392,11 @@ function startRace(id) {
 
 function accelerate(id) {
 	// POST request to `${SERVER}/api/races/${id}/accelerate`
+	return fetch(`${SERVER}/api/races/${id}/accelerate`, {
+		method: 'POST',
+		...defaultFetchOpts(),
+	})
+	.catch(error => console.log("Accelerate request failed", error))
 	// options parameter provided as defaultFetchOpts
 	// no body or datatype needed for this request
 }
