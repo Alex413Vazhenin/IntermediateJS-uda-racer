@@ -126,7 +126,7 @@ function runRace(raceID) {
 				else if (res.status == "finished") {
 					clearInterval(raceInterval)
 					renderAt('#race', resultsView(res.positions))
-					reslove(res)
+					resolve(res)
 				}
 	// remember to add error handling for the Promise
 			})	
@@ -144,14 +144,14 @@ async function runCountdown() {
 		return new Promise(resolve => {
 			// TODO - use Javascript's built in setInterval method to count down once per second
 			let countdown = setInterval(() => {
-				--timer;
+				if (timer > 0) {
 			// run this DOM manipulation to decrement the countdown for the user
-			document.getElementById('big-numbers').innerHTML = --timer;
-			if (timer === 0) {
+			document.getElementById('big-numbers').innerHTML = --timer
+				} else {
 				// TODO - if the countdown is done, clear the interval, resolve the promise, and return
-				clearInterval(countdown);
-				resolve(true);
-			}
+					clearInterval(countdown);
+					resolve(true);
+				}
 			}, 1000);
 		});
 	} catch(error) {
