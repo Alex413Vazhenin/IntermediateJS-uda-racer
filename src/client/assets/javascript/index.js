@@ -264,7 +264,7 @@ function renderRaceStartView(track, racers) {
 			</section>
 		</main>
 		<footer></footer>
-	`
+	`;
 }
 
 function resultsView(positions) {
@@ -335,10 +335,28 @@ function defaultFetchOpts() {
 
 function getTracks() {
 	// GET request to `${SERVER}/api/tracks`
+	return fetch(`${SERVER}/api/tracks`, { ...defaultFetchOpts() })
+	.then((res) => res.json())
+	.then(res => {
+		let tracks = res;
+		updateStore(store, {tracks});
+		return tracks;
+	})
+	.catch((err) => console.log("GetTracks request failed", err));
+	
 }
 
 function getRacers() {
 	// GET request to `${SERVER}/api/cars`
+	return fetch(`${SERVER}/api/cars`, { ...defaultFetchOpts() })
+	.then((res) => res.json())
+	.then(res => {
+		let racers = res;
+		updateStore(store, {racers});
+		return racers;
+	})
+	.catch((err) => console.log("GetRacers request failed", err));
+	
 }
 
 function createRace(player_id, track_id) {
