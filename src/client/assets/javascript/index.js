@@ -74,7 +74,7 @@ async function delay(ms) {
 
 // This async function controls the flow of the race, add the logic and error handling
 async function handleCreateRace() {
-	try{
+	try {
 	// render starting UI
 	renderAt('#race', renderRaceStartView(store.track_id, store.player_id))
 	// TODO - Get player_id and track_id from the store.
@@ -82,8 +82,8 @@ async function handleCreateRace() {
 	
 	// const race = TODO - invoke the API call to create the race, then save the result
 	res = await createRace(player_id, track_id);
-	const resId = await res.Id;
-	const race_id = await resId - 1;
+	const resID = await res.ID;
+	const race_id = await resID - 1;
 
 	// TODO - update the store with the race id
 	const update = await updateStore(store, {race_id});
@@ -93,11 +93,8 @@ async function handleCreateRace() {
 	const countdownFinished = await runCountdown();
 
 	// TODO - call the async function startRace
-	console.log(store.race_id);
-		if (countdownFinished) {
-			const start = await startRace(store.race_id);
-			const run = await runRace(store.race_id);
-		}
+	const start = await startRace(store.race_id);
+	const run = await runRace(store.race_id);
 	}
 	catch(error) {console.log("Race creation failed", error)}
 }
@@ -143,14 +140,15 @@ async function runCountdown() {
 
 		return new Promise(resolve => {
 			// TODO - use Javascript's built in setInterval method to count down once per second
-			let countdown = setInterval(() => {
+			setInterval(() => {
 				if (timer > 0) {
 			// run this DOM manipulation to decrement the countdown for the user
-			document.getElementById('big-numbers').innerHTML = --timer
+					document.getElementById('big-numbers').innerHTML = --timer
 				} else {
 				// TODO - if the countdown is done, clear the interval, resolve the promise, and return
-					clearInterval(countdown);
-					resolve(true);
+					clearInterval();
+					resolve();
+					return;
 				}
 			}, 1000);
 		});
@@ -197,6 +195,7 @@ function handleSelectTrack(target) {
 function handleAccelerate() {
 	console.log("accelerate button clicked");
 	// TODO - Invoke the API call to accelerate
+	accelerate(store.race_id)
 }
 
 // HTML VIEWS ------------------------------------------------
